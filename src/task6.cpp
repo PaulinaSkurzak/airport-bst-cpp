@@ -1,9 +1,3 @@
-// EECE 2560 Mini Project - Task 6: The shape experiment
-
-// The sorted-order tree is a chain of 6,072 nodes, so insert, search,
-// height, average depth and clear all use loops instead of recursion.
-// Only the balanced build is recursive (its depth is only about 13).
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -22,7 +16,6 @@ public:
     double lon;
 };
 
-// node of the tree
 struct Node {
     Airport data;
     Node* left;
@@ -152,7 +145,7 @@ public:
         vector<Node*> stack;
         Node* cur = root;
         while (cur != nullptr || stack.size() > 0) {
-            while (cur != nullptr) {          // go as far left as possible
+            while (cur != nullptr) {      
                 stack.push_back(cur);
                 cur = cur->left;
             }
@@ -236,7 +229,7 @@ void printRow(string name, AirportBST& tree, vector<string>& keys) {
     double ms = timeSearches(tree, keys);
 
     cout << name;
-    for (int i = (int)name.size(); i < 26; i++) cout << " ";   // line up the columns
+    for (int i = (int)name.size(); i < 26; i++) cout << " ";  
     cout << height << "\t\t" << avgDepth << "\t\t" << ms << " ms" << endl;
 }
 
@@ -297,7 +290,7 @@ int main(int argc, char* argv[]) {
     }
 
     cout << endl << "Build order               Height\t\tAvg depth\tTime for 10,000 searches" << endl;
-    cout << "-------------------------------------------------------------------------" << endl;
+    cout << "----------" << endl;
 
     buildByInsert(tree, fileOrder);
     printRow("File order", tree, keys);
