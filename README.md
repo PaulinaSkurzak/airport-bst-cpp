@@ -1,10 +1,8 @@
 # Airport bst cpp
-
 A binary search tree in C++17 that indexes 6,072 airports by IATA code.
-EECE 2560 · Northeastern University · Fall 2026
+
 
 ## Problem
-
 Airlines and travel agents identify airports by three-letter IATA codes. This service returns
 an airport's name, city and country for a given code, supports insertion and deletion, and
 answers alphabetical and range queries. It uses a custom `AirportBST` class.
