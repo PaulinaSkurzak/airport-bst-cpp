@@ -1,5 +1,3 @@
-// EECE 2560 Mini Project - Task 2: Search
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -21,7 +19,6 @@ public:
     }
 };
 
-// node of the tree
 struct Node {
     Airport data;
     Node* left;
@@ -32,7 +29,6 @@ class AirportBST {
 private:
     Node* root;
 
-    // helper to delete all the nodes
     void destroy(Node* node) {
         if (node == nullptr) return;
         destroy(node->left);
@@ -40,7 +36,6 @@ private:
         delete node;
     }
 
-    // helper for height
     int height(Node* node) {
         if (node == nullptr) return -1;
         int leftHeight = height(node->left);
@@ -87,12 +82,11 @@ public:
                 cur = cur->right;
             }
             else {
-                delete newNode;   // duplicate code
+                delete newNode;  
                 return false;
             }
         }
     }
-
 
     Airport* find(string code) {
         Node* cur = root;
@@ -105,15 +99,15 @@ public:
 
             if (code == cur->data.code) {
                 cout << " (comparisons: " << comparisons << ")" << endl;
-                return &cur->data;          // found it
+                return &cur->data;         
             }
 
             cout << " -> ";
             if (code < cur->data.code) {
-                cur = cur->left;            // smaller, go left
+                cur = cur->left;          
             }
             else {
-                cur = cur->right;           // bigger, go right
+                cur = cur->right;          
             }
         }
 
@@ -130,7 +124,6 @@ public:
         return &cur->data;
     }
 
-    // largest code is all the way to the right
     Airport* findMax() {
         Node* cur = root;
         while (cur->right != nullptr) {
@@ -285,7 +278,7 @@ int main(int argc, char* argv[]) {
         else if (command == "find") {
             string code;
             cin >> code;
-            // make it uppercase
+            
             for (int i = 0; i < (int)code.size(); i++) {
                 if (code[i] >= 'a' && code[i] <= 'z') {
                     code[i] = code[i] - 32;
