@@ -1,0 +1,87 @@
+TASK 4: TRAVERSALS AND VALIDATION
+
+INORDER(node, list)
+1   if node is NULL
+2   return
+3   INORDER(node.left, list)
+4   add node's airport to list
+5   INORDER(node.right, list)
+
+CHECK-SORTED(list)
+6   for i = 1 to size of list - 1
+7   if list[i-1].code >= list[i].code
+8   return false
+9   return true
+
+LIST(root)
+10  list = empty
+11  INORDER(root, list)
+12  print every airport in list
+13  print CHECK-SORTED(list)
+
+PREORDER(node, file)
+14  if node is NULL
+15  return
+16  write node.code to file
+17  PREORDER(node.left, file)
+18  PREORDER(node.right, file)
+
+SAVE(root, fileName)
+19  open fileName for writing
+20  PREORDER(root, file)
+21  close file
+
+LOAD(fileName, oldTree)
+22  newTree = empty tree
+23  for each code in fileName
+24  a = find code in oldTree
+25  if a is not NULL
+26  INSERT(newTree, a)
+27  return newTree
+
+LEVEL-ORDER(root)
+28  codes = empty
+29  queue = empty
+30  add root to queue
+31  while queue is not empty
+32  cur = take the front of queue
+33  add cur.code to codes
+34  if cur.left is not NULL
+35  add cur.left to queue
+36  if cur.right is not NULL
+37  add cur.right to queue
+38  return codes
+
+SAME-SHAPE(tree1, tree2)
+39  if HEIGHT(tree1) != HEIGHT(tree2)
+40  return false
+41  if LEVEL-ORDER(tree1) != LEVEL-ORDER(tree2)
+42  return false
+43  return true
+
+VALIDATE(node, lo, hi)
+44  if node is NULL
+45  return true
+46  if lo is set and node.code <= lo
+47  return false
+48  if hi is set and node.code >= hi
+49  return false
+50  return VALIDATE(node.left, lo, node.code) and VALIDATE(node.right, node.code, hi)
+
+TEST-TASK4(fileName)
+51  for each airport in fileName
+52  INSERT(tree, airport)
+53  if VALIDATE(tree.root, none, none) is false
+54  count a failure
+55  LIST(tree.root)
+56  SAVE(tree.root, "data/preorder.txt")
+57  newTree = LOAD("data/preorder.txt", tree)
+58  print SAME-SHAPE(tree, newTree)
+59  INSERT(tree, QQQ)
+60  print VALIDATE(tree.root, none, none)
+61  DELETE(tree, a leaf)
+62  print VALIDATE(tree.root, none, none)
+63  DELETE(tree, the root)
+64  print VALIDATE(tree.root, none, none)
+65  DELETE(tree, QQQ)
+66  print VALIDATE(tree.root, none, none)

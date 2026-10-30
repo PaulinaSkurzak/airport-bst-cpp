@@ -1,0 +1,36 @@
+TASK 2: SEARCH
+
+FIND(root, code)
+1   cur = root, comparisons = 0
+2   while cur is not NULL
+3   comparisons = comparisons + 1 and print cur.code
+4   if code == cur.code, print comparisons and return cur
+5   if code < cur.code, cur = cur.left, else cur = cur.right
+6   print "(NULL) not found" and comparisons
+7   return NULL
+
+FIND-MIN(root)
+8   go left from the root until there is no left child
+9   return that node
+
+FIND-MAX(root)
+10  go right from the root until there is no right child
+11  return that node
+
+FIND-LEAF(root)
+12  go down from the root until a node has no children
+13  return that node's code
+
+FIND-DEEPEST(root)
+14  go down from the root, always to the taller side (using HEIGHT)
+15  return that node's code
+
+TEST-SEARCH(root)
+16  FIND the root, a leaf, the deepest node, "XYZ", "000" and "ZZZ"
+17  print the airport for every code that is found
+18  print FIND-MIN(root) and FIND-MAX(root)
+
+COMMAND-LOOP(root)
+19  read commands until "quit"
+20  "find CODE": make CODE uppercase, FIND it, print the airport if found
+21  "min" or "max": print FIND-MIN or FIND-MAX
