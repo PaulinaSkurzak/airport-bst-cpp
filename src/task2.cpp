@@ -1,4 +1,4 @@
-// Task 2: search with path and comparisons, min/max, all search cases
+
 #include <iostream>
 #include <fstream>
 #include <string>
