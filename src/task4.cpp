@@ -1,5 +1,3 @@
-// EECE 2560 Mini Project - Task 4: Traversals and validation
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -106,7 +104,7 @@ public:
                 cur = cur->right;
             }
             else {
-                delete newNode;   // duplicate code
+                delete newNode;
                 return false;
             }
         }
@@ -315,7 +313,7 @@ int main(int argc, char* argv[]) {
     else cout << validateFails << " FAILED" << endl;
     cout << "Height: " << tree.getHeight() << endl;
 
-    cout << endl << "========== Task 4(a): list (inorder) ==========" << endl;
+    cout << endl << "= Task 4(a): list (inorder) =" << endl;
     vector<Airport> list = tree.getInorder();
 
 
@@ -335,7 +333,7 @@ int main(int argc, char* argv[]) {
     else cout << "NO" << endl;
 
 
-    cout << endl << "========== Task 4(b): save and load ==========" << endl;
+    cout << endl << "= Task 4(b): save and load=" << endl;
     string saveFile = "data/preorder.txt";
     if (tree.savePreorder(saveFile)) cout << "Saved preorder codes to " << saveFile << endl;
     else cout << "Could not write " << saveFile << endl;
@@ -356,7 +354,6 @@ int main(int argc, char* argv[]) {
     for (int i = 0; i < 10 && i < (int)levels2.size(); i++) cout << levels2[i] << " ";
     cout << endl;
 
-    // compare the whole level order, node by node
     bool sameShape = (tree.getHeight() == reloaded.getHeight())
                      && (levels1.size() == levels2.size());
     for (int i = 0; sameShape && i < (int)levels1.size(); i++) {
@@ -367,7 +364,7 @@ int main(int argc, char* argv[]) {
     else cout << "NO" << endl;
 
 
-    cout << endl << "========== Task 4(c): validate in the tests ==========" << endl;
+    cout << endl << "= Task 4(c): validate in the tests =" << endl;
 
     Airport q;
     q.code = "QQQ";
