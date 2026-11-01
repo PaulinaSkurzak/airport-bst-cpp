@@ -10,9 +10,8 @@ Every flight booking, boarding pass and baggage tag identifies an airport by its
 A travel company requires a lookup service that:
 
 - returns an airport's name, city, country and location for a given code
-- remains correct as airports are added to and removed from its database
-- produces alphabetical listings for customer agents
-- answers range queries, such as every code from **BOS** to **BWI**
+- remains correct as airports are removed from its database
+- answers range queries in alphabetical order, such as every code from **BOS** to **BWI**
 
 This project implements that service on a custom binary search tree, `AirportBST`, keyed by
 IATA code and loaded from the OpenFlights airport database.
@@ -28,16 +27,12 @@ g++ -std=c++17 -O2 src/*.cpp -o airports
 
 | Command | Description |
 |---|---|
-| `load FILE` | Load the airport data, or rebuild the tree from a saved preorder file |
+| `load FILE` | Load the airport data from a file |
 | `find CODE` | Search for an airport and show the search path and comparisons |
-| `min` / `max` | Show the smallest / largest code |
-| `add CODE` / `remove CODE` | Insert or delete an airport, then validate the tree |
-| `list` | List every airport in alphabetical order |
-| `save FILE` | Save the codes in preorder |
+| `remove CODE` | Delete an airport, then validate the tree |
 | `range FROM TO` | List every airport between two codes |
 | `validate` | Check the BST property using the (lo, hi) method |
 | `rebalance` | Rebuild the tree as a balanced BST |
-| `experiment` | Run the Task 6 shape experiment |
 
 ---
 
@@ -63,6 +58,8 @@ Height: 12 Average depth: 10.7
 ---
 
 ## Shape Experiment
+
+*This experiment was run separately (see `task6.cpp`); it is not a command in `airports`.*
 
 The same 6,072 codes were inserted in four different orders. Each tree was then searched with
 the same 10,000 randomly selected codes.
