@@ -62,7 +62,7 @@ Height: 12 Average depth: 10.7
 
 ---
 
-## Task 6: Shape Experiment
+## Shape Experiment
 
 The same 6,072 codes were inserted in four different orders. Each tree was then searched with
 the same 10,000 randomly selected codes.
