@@ -4,180 +4,176 @@
 #include <vector>
 using namespace std;
 
-class Airport
-{
+class Airport {
 public:
+    string code;
     string name;
     string city;
     string country;
-    string iata;
     string icao;
-    double latitude;
-    double longitude;
+    double lat;
+    double lon;
 
-    Airport() {}
+    void print() {
+        cout << code << " " << name << ", " << city << ", " << country << endl;
+    }
 };
 
-class AirportBST
-{
+struct Node {
+    Airport data;
+    Node* left;
+    Node* right;
+};
+
+class AirportBST {
 private:
-    struct Node          
-    {
-        Airport data;
-        Node* left;
-        Node* right;
-        Node(Airport a) : data(a), left(nullptr), right(nullptr) {}
-    };
+    Node* root;
 
-    int heightHelper(Node* node)
-{
-    if (node == nullptr) return -1;
-    int leftH = heightHelper(node->left);
-    int rightH = heightHelper(node->right);
-    return 1 + max(leftH, rightH);
-}
-void sumDepths(Node* node, int depth, long long& sum, int& count)
-{
-    if (node == nullptr) return;
-    sum += depth;
-    count++;
-    sumDepths(node->left, depth + 1, sum, count);
-    sumDepths(node->right, depth + 1, sum, count);
-}
+    void destroy(Node* node) {
+        if (node == nullptr) return;
+        destroy(node->left);
+        destroy(node->right);
+        delete node;
+    }
 
-    Node* root;           
+    int height(Node* node) {
+        if (node == nullptr) return -1;
+        int leftHeight = height(node->left);
+        int rightHeight = height(node->right);
+        if (leftHeight > rightHeight) return leftHeight + 1;
+        else return rightHeight + 1;
+    }
+
+    void sumDepths(Node* node, int depth, long long& sum, int& count) {
+        if (node == nullptr) return;
+        sum += depth;
+        count++;
+        sumDepths(node->left, depth + 1, sum, count);
+        sumDepths(node->right, depth + 1, sum, count);
+    }
 
 public:
-    AirportBST() : root(nullptr) {}
+    AirportBST() {
+        root = nullptr;
+    }
 
-    double averageDepth()
-    {
+    ~AirportBST() {
+        destroy(root);
+    }
+
+    bool insert(Airport a) {
+        Node* newNode = new Node;
+        newNode->data = a;
+        newNode->left = nullptr;
+        newNode->right = nullptr;
+
+        if (root == nullptr) {
+            root = newNode;
+            return true;
+        }
+
+        Node* cur = root;
+        while (true) {
+            if (a.code < cur->data.code) {
+                if (cur->left == nullptr) {
+                    cur->left = newNode;
+                    return true;
+                }
+                cur = cur->left;
+            }
+            else if (a.code > cur->data.code) {
+                if (cur->right == nullptr) {
+                    cur->right = newNode;
+                    return true;
+                }
+                cur = cur->right;
+            }
+            else {
+                delete newNode;
+                return false;
+            }
+        }
+    }
+
+    int getHeight() {
+        return height(root);
+    }
+
+    double getAverageDepth() {
         long long sum = 0;
         int count = 0;
         sumDepths(root, 0, sum, count);
-        return count == 0 ? 0.0 : (double)sum / count;
+        if (count == 0) return 0.0;
+        return (double)sum / count;
     }
-    int height()
-    {
-        return heightHelper(root);
-    }
-    bool insert(const Airport& a)
-{
-    if (root == nullptr)
-    {
-        root = new Node(a);
-        return true;
-    }
-    Node* cur = root;
-    while (true)
-    {
-        if (a.iata == cur->data.iata)
-            return false;    
-        else if (a.iata < cur->data.iata)
-        {
-            if (cur->left == nullptr) { cur->left = new Node(a); return true; }
-            cur = cur->left;
-        }
-        else
-        {
-            if (cur->right == nullptr) { cur->right = new Node(a); return true; }
-            cur = cur->right;
-        }
-    }
-}
 };
 
-bool readFile(const string &fileName, vector<string> &lines)
-{
-    ifstream file(fileName);
-    if (!file)
-    {
-        return false;
-    }
-    string line;
-    while (getline(file, line))
-    {
-        lines.push_back(line);
-    }
-    return true;
-}
-
-// Your parser, built and tested earlier
-vector<string> parseLine(const string& s)
-{
+vector<string> splitLine(string line) {
     vector<string> fields;
-    string currentField = "";
-    bool insideQuotes = false;
+    string field = "";
+    bool inQuotes = false;
 
-    for (size_t i = 0; i < s.length(); i++)
-    {
-        char c = s[i];
-        if (c == '"')
-        {
-            insideQuotes = !insideQuotes;
+    for (int i = 0; i < (int)line.size(); i++) {
+        char c = line[i];
+        if (c == '"') {
+            inQuotes = !inQuotes;
         }
-        else if (c == ',' && !insideQuotes)
-        {
-            fields.push_back(currentField);
-            currentField = "";
+        else if (c == ',' && !inQuotes) {
+            fields.push_back(field);
+            field = "";
         }
-        else
-        {
-            currentField += c;
+        else {
+            field += c;
         }
     }
-    fields.push_back(currentField);
+    fields.push_back(field);
     return fields;
 }
 
-int main()
-{
+int main(int argc, char* argv[]) {
     string fileName = "data/airports.dat";
-    vector<string> lines;
+    if (argc > 1) fileName = argv[1];
 
-    if (!readFile(fileName, lines))
-    {
-        cout << "Error: cannot open " << fileName << endl;
+    ifstream file(fileName);
+    if (!file) {
+        cout << "Could not open " << fileName << endl;
         return 1;
     }
 
-    vector<Airport> airports;
+    AirportBST tree;
+    int loaded = 0;
     int skipped = 0;
+    int duplicates = 0;
+    string line;
 
-    for (size_t i = 0; i < lines.size(); i++)
-    {
-        vector<string> fields = parseLine(lines[i]);
-        if (fields[4] == "\\N")
-        {
-            skipped++;      
+    while (getline(file, line)) {
+        if (line.size() > 0 && line[line.size() - 1] == '\r') {
+            line.pop_back();
+        }
+
+        vector<string> f = splitLine(line);
+        if (f.size() < 8 || f[4] == "\\N") {
+            skipped++;
             continue;
         }
+
         Airport a;
-        a.name = fields[1];
-        a.city = fields[2];
-        a.country = fields[3];
-        a.iata = fields[4];
-        a.icao = fields[5];
-        a.latitude = stod(fields[6]);
-        a.longitude = stod(fields[7]);
-        airports.push_back(a);
+        a.name = f[1];
+        a.city = f[2];
+        a.country = f[3];
+        a.code = f[4];
+        a.icao = f[5];
+        a.lat = stod(f[6]);
+        a.lon = stod(f[7]);
+
+        if (tree.insert(a)) loaded++;
+        else duplicates++;
     }
+    file.close();
 
-    cout << "Loaded " << airports.size() << " airports." << endl;
-    cout << "Skipped: " << skipped << endl; 
-    
-    AirportBST tree;
-int duplicates = 0;
-
-for (size_t i = 0; i < airports.size(); i++)
-{
-    if (!tree.insert(airports[i]))
-        duplicates++;
-}
-
-cout << "Duplicates: " << duplicates << endl;
-cout << "Height: " << tree.height() << endl;
-cout << "Average depth: " << tree.averageDepth() << endl;
+    cout << "Loaded " << loaded << " airports (" << skipped
+         << " lines skipped: no IATA code). Duplicates: " << duplicates << endl;
+    cout << "Height: " << tree.getHeight() << "   Average depth: " << tree.getAverageDepth() << endl;
 
     return 0;
 }
