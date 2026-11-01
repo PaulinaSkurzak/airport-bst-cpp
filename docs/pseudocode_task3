@@ -1,0 +1,50 @@
+TASK 3: DELETE
+
+REMOVE(tree, code)
+1   parent = NULL, cur = root
+2   while cur is not NULL and cur.code != code
+3   parent = cur
+4   if code < cur.code, cur = cur.left, else cur = cur.right
+5   if cur is NULL, return "not found"
+6   if cur has two children
+7   succParent = cur, succ = cur.right
+8   while succ.left is not NULL
+9   succParent = succ, succ = succ.left
+10  cur.data = succ.data
+11  parent = succParent, cur = succ
+12  if cur has a left child
+13  child = cur.left
+14  label = "D2, left child"
+15  else if cur has a right child
+16  child = cur.right
+17  label = "D2, right child"
+18  else
+19  child = NULL
+20  label = "D1, a leaf"
+21  if parent is NULL, root = child
+22  else if parent.left == cur, parent.left = child
+23  else parent.right = child
+24  delete cur
+25  return label
+
+FIND-LEAF(root)
+26  go down from the root, always to a child that exists, until a node has none
+27  return that node's code
+
+FIND-LEFT-ONLY(root)
+28  search the tree for a node with a left child but no right child
+29  return that node's code
+
+FIND-RIGHT-ONLY(root)
+30  search the tree for a node with a right child but no left child
+31  return that node's code
+
+FIND-TWO-CHILDREN(root)
+32  search the tree for a node with both a left and a right child
+33  return that node's code
+
+TEST-DELETE(tree)
+34  REMOVE the root, print before and after
+35  REMOVE a leaf, a left-only node, a right-only node, a two-children node
+36  INSERT a made-up airport QQQ with my own name and city
+37  print whether QQQ is found, REMOVE QQQ, print whether QQQ is found

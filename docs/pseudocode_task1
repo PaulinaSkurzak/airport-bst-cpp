@@ -1,0 +1,35 @@
+TASK 1: BUILD
+
+SPLIT-LINE(line)
+1   fields = empty, field = "", inQuotes = false
+2   for each character c in line
+3   if c is a quote, flip inQuotes
+4   else if c is a comma and not inQuotes, add field to fields and reset field
+5   else add c to field
+6   add the last field to fields
+7   return fields
+
+LOAD(fileName)
+8   tree = empty tree, loaded = 0, skipped = 0, duplicates = 0
+9   for each line in fileName
+10  fields = SPLIT-LINE(line)
+11  if fields has fewer than 8 items or the code is "\N"
+12  skipped = skipped + 1 and continue
+13  a = new Airport from fields
+14  if INSERT(tree, a) succeeds, loaded = loaded + 1
+15  else duplicates = duplicates + 1
+16  print loaded, skipped, duplicates
+17  return tree
+
+INSERT(tree, a)
+18  newNode = new node with a
+19  if tree is empty, root = newNode, return true
+20  cur = root
+21  while true
+22  if a.code < cur.code
+23  if cur.left is NULL, cur.left = newNode, return true
+24  cur = cur.left
+25  else if a.code > cur.code
+26  if cur.right is NULL, cur.right = newNode, return true
+27  cur = cur.right
+28  else return false

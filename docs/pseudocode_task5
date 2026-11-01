@@ -1,0 +1,15 @@
+TASK 5: RANGE
+
+RANGE(root, from, to)
+1   results = empty, visited = 0
+2   call RANGE-HELPER(root, from, to, results, visited)
+3   print every code in results
+4   print size of results and visited
+5   return size of results
+
+RANGE-HELPER(node, from, to, results, visited)
+6   if node is NULL, return
+7   visited = visited + 1
+8   if node.code >= from, call RANGE-HELPER(node.left, from, to, results, visited)
+9   if node.code >= from and node.code <= to, add node.code to results
+10  if node.code <= to, call RANGE-HELPER(node.right, from, to, results, visited)
